@@ -17,6 +17,23 @@ var getLogins = function() {
     }); 
   }); 
 };
+
+// get a login by id
+var getLoginByLoginId = function(id) {
+  if(DEBUG) console.log("logins.pg.dal.getLoginByLoginId()");
+  return new Promise(function(resolve, reject) {
+    const sql = `SELECT id, username, password FROM public."Logins" WHERE id = $1`;
+    dal.query(sql, [id], (err, result) => {
+      if (err) {
+        // logging should go here
+        if(DEBUG) console.log(err);
+        reject(err);
+      } else {
+        resolve(result.rows);
+      }
+    }); 
+  }); 
+};
 // add a login
 var addLogin = function(username, password) {
   if(DEBUG) console.log("logins.pg.dal.addLogin()");
@@ -34,7 +51,39 @@ var addLogin = function(username, password) {
   });
 };
 
+var patchLogin = function(id, username, password) {
+  if(DEBUG) console.log("logins.pg.dal.patchLogin()");
+  return new Promise(function(resolve, reject) {
+    const sql = `UPDATE public."Logins" SET username=$2, password=$3 WHERE id=$1;`;
+    dal.query(sql, [id, username, password], (err, result) => {
+      if (err) {
+          reject(err);
+        } else {
+          resolve(result.rows);
+        }
+    }); 
+  });
+};
+
+var deleteLogin = function(id) {
+  if(DEBUG) console.log("logins.pg.dal.deleteLogin()");
+  return new Promise(function(resolve, reject) {
+    const sql = `DELETE FROM public."Logins" WHERE id = $1;`;
+    dal.query(sql, [id], (err, result) => {
+      if (err) {
+          reject(err);
+        } else {
+          resolve(result.rows);
+        }
+    }); 
+  });
+};
+
+
 module.exports = {
   getLogins,
   addLogin,
+  getLoginByLoginId,
+  patchLogin,
+  deleteLogin
 }
