@@ -1,5 +1,7 @@
 var router = require('express').Router();
-const loginsDal = require('../../services/pg.logins.dal') // Import the DAL page pg.logins.dal.js
+//const loginsDal = require('../../services/pg.logins.dal') // Import the DAL page pg.logins.dal.js
+const loginsDal = require('../../services/m.logins.dal'); // get all the data from mongoDB
+
 
 // api/logins
 router.get('/', async (req, res) => {
