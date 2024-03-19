@@ -1,4 +1,5 @@
 const express = require('express');
+const uuid = require('uuid');
 const router = express.Router();
 const loginsDal = require('../services/pg.logins.dal')
 //const loginsDal = require('../services/m.logins.dal'); // get all the data from mongoDB
@@ -36,7 +37,7 @@ router.get('/:id', async (req, res) => { // get a login by id
 
 router.get('/:id/edit', async (req, res) => {
   if(DEBUG) console.log('login.Edit : ' + req.params.id);
-  res.render('loginPatch.ejs', {username: req.query.username, theId: req.params.id}); // render loginPatch.ejs page! Create it!
+  res.render('loginPatch.ejs', {username: req.query.username,  email: req.query.email, theId: req.params.id}); // render loginPatch.ejs page! Create it!
 });
 
 router.get('/:id/delete', async (req, res) => {
@@ -47,7 +48,7 @@ router.get('/:id/delete', async (req, res) => {
 router.post('/', async (req, res) => { // add a new login
   if(DEBUG) console.log("logins.POST");
   try {
-      await loginsDal.addLogin(req.body.username, req.body.password);
+      await loginsDal.addLogin(req.body.username, req.body.password, req.body.email, uuid.v4());
       res.redirect('/logins/');
   } catch (err){
  //     if(DEBUG) console.log(err);
@@ -59,7 +60,7 @@ router.post('/', async (req, res) => { // add a new login
 router.patch('/:id', async (req, res) => {
   if(DEBUG) console.log('logins.PATCH: ' + req.params.id);
   try {
-      await loginsDal.patchLogin(req.params.id, req.body.username, req.body.password);
+      await loginsDal.patchLogin(req.params.id, req.body.username, req.body.password, req.body.email);
       res.redirect('/logins/');
   } catch {
       // log this error to an error log file.
