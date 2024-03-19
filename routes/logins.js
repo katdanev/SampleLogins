@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-//const loginsDal = require('../services/pg.logins.dal')
-const loginsDal = require('../services/m.logins.dal'); // get all the data from mongoDB
+const loginsDal = require('../services/pg.logins.dal')
+//const loginsDal = require('../services/m.logins.dal'); // get all the data from mongoDB
 
 router.get('/', async (req, res) => { // list all logins
   // const theLogins = [
